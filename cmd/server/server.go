@@ -61,7 +61,9 @@ func run() {
 		QUICConfig: &quic.Config{},
 	}
 
-	server.ListenAndServe()
+	if err := server.ListenAndServe(); err != nil {
+		logger.Fatal("faild to listen...")
+	}
 
 }
 
