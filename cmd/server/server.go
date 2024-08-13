@@ -2,13 +2,7 @@ package server
 
 import (
 	"context"
-	"crypto/rand"
-	"crypto/rsa"
-	"crypto/tls"
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
-	"math/big"
 	"net/http"
 	"os"
 	"os/signal"
@@ -74,9 +68,16 @@ func run() {
 	}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
-			logger.Fatal("faild to listen ...")
+		if viper.GetBool(`settings.application.ishttps`) {
+			if err := server.ListenAndServeTLS(viper.GetString(`settings.ssl.pem`), viper.GetString(`settings.ssl.key`)); err != nil {
+				logger.Fatal("faild to listen ...")
+			}
+		} else {
+			if err := server.ListenAndServe(); err != nil {
+				logger.Fatal("faild to listen ...")
+			}
 		}
+
 	}()
 
 	quit := make(chan os.Signal, 1)
@@ -94,6 +95,7 @@ func run() {
 	logger.Info("Server exiting")
 }
 
+/*
 func generateTLSConfig() *tls.Config {
 	key, err := rsa.GenerateKey(rand.Reader, 1024)
 	if err != nil {
@@ -116,3 +118,4 @@ func generateTLSConfig() *tls.Config {
 		NextProtos:   []string{"quic-echo-example"},
 	}
 }
+*/

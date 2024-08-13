@@ -22,3 +22,7 @@ settings:
     maxbackups: 300
     maxsize: 10240
     path: ./log/wecat.log
+  
+  ssl:
+    key: "/path/key.key"
+    pem: "/path/pem.pem"
