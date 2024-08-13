@@ -1,5 +1,13 @@
 
 settings:
+  application:
+    domain: localhost:80
+    host: 0.0.0.0
+    ishttps: false
+    port: 80
+    readtimeout: 1
+    writetimeout: 1
+
   jwt:
     secret: wecat
     timeout: 86400
