@@ -2,16 +2,15 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 	"wecat/logger"
+	"wecat/pkg/setting"
 	"wecat/routers"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -35,13 +34,16 @@ func init() {
 }
 
 func setup() error {
-	viper.SetConfigFile(config)
-	err := viper.ReadInConfig()
-	if err != nil {
-		fmt.Printf("Parse config file fail: %s", err.Error())
+	if err := setting.Setup(config); err != nil {
+		return err
 	}
+	// viper.SetConfigFile(config)
+	// err := viper.ReadInConfig()
+	// if err != nil {
+	// 	fmt.Printf("Parse config file fail: %s", err.Error())
+	// }
 	// 初始化日志
-	logger.Init()
+	logger.Setup()
 
 	return nil
 }
@@ -58,18 +60,15 @@ func run() {
 	// 	QUICConfig: &quic.Config{},
 	// }
 
-	// if err := server.ListenAndServe(); err != nil {
-	// 	logger.Fatal("faild to listen...")
-	// }
 	server := http.Server{
-		Addr:    ":80",
+		Addr:    setting.AppSetting.Host + ":" + setting.AppSetting.Port,
 		Handler: router,
 		// TLSConfig: generateTLSConfig(),
 	}
-
+	logger.Infof("listen: %s", setting.AppSetting.Host+":"+setting.AppSetting.Port)
 	go func() {
-		if viper.GetBool(`settings.application.ishttps`) {
-			if err := server.ListenAndServeTLS(viper.GetString(`settings.ssl.pem`), viper.GetString(`settings.ssl.key`)); err != nil {
+		if setting.AppSetting.IsHttps {
+			if err := server.ListenAndServeTLS(setting.SSLSetting.Pem, setting.SSLSetting.Key); err != nil {
 				logger.Fatal("faild to listen ...")
 			}
 		} else {

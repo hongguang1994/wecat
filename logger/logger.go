@@ -3,8 +3,8 @@ package logger
 import (
 	"os"
 	"time"
+	"wecat/pkg/setting"
 
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -22,28 +22,28 @@ var levelMap = map[string]zapcore.Level{
 	"fatal":  zapcore.FatalLevel,
 }
 
-func Init() {
+func Setup() {
 	var syncWriters []zapcore.WriteSyncer
-	level := getLoggerLevel(viper.GetString(`settings.log.level`))
+	level := getLoggerLevel(setting.LogSetting.Level)
 
 	fileConfig := &lumberjack.Logger{
-		Filename:   viper.GetString(`settings.log.path`),
-		MaxSize:    viper.GetInt(`settings.log.maxsize`),
-		MaxAge:     viper.GetInt(`settings.log.maxAge`),
-		MaxBackups: viper.GetInt(`settings.log.maxBackups`),
-		LocalTime:  viper.GetBool(`settings.log.localtime`),
-		Compress:   viper.GetBool(`settings.log.compress`),
+		Filename:   setting.LogSetting.Path,
+		MaxSize:    setting.LogSetting.MaxSize,
+		MaxAge:     setting.LogSetting.MaxAge,
+		MaxBackups: setting.LogSetting.MaxBackups,
+		LocalTime:  setting.LogSetting.LocalTime,
+		Compress:   setting.LogSetting.Compress,
 	}
 	encoder := zap.NewProductionEncoderConfig()
 	encoder.EncodeTime = func(t time.Time, pae zapcore.PrimitiveArrayEncoder) {
 		pae.AppendString(t.Format("2016-01-02 15:04:05.000000"))
 	}
 
-	if viper.GetBool(`settings.log.consolestdout`) {
+	if setting.LogSetting.ConsoleStdout {
 		syncWriters = append(syncWriters, zapcore.AddSync(os.Stdout))
 	}
 
-	if viper.GetBool(`settings.log.filestdout`) {
+	if setting.LogSetting.FileStdout {
 		syncWriters = append(syncWriters, zapcore.AddSync(fileConfig))
 	}
 

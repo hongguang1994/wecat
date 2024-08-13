@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"wecat/logger"
 	"wecat/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,11 @@ func InitRouter() *gin.Engine {
 	sysNoCheckRoleRouter(apiv1)
 
 	sysCheckRoleRouter(apiv1)
+
+	routes := r.Routes()
+	for _, v := range routes {
+		logger.Infof("method : %s path: %s", v.Method, v.Path)
+	}
 
 	return r
 }

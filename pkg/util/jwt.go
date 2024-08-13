@@ -3,9 +3,9 @@ package util
 import (
 	"sync"
 	"time"
+	"wecat/pkg/setting"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/spf13/viper"
 )
 
 type Claims struct {
@@ -22,8 +22,8 @@ var (
 
 func GenerateToken(username, password string) (string, error) {
 	once.Do(func() {
-		jwtSecret = viper.GetString(`settings.jwt.secret`)
-		timeout = viper.GetInt64(`settings.jwt.timeout`)
+		jwtSecret = setting.JwtSetting.Secret
+		timeout = setting.JwtSetting.Timeout
 	})
 
 	nowTime := time.Now()
