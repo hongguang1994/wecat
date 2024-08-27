@@ -1,0 +1,88 @@
+
+Server:
+  RunMode: debug
+  HttpPort: 8000
+  ReadTimeout: 60
+  WriteTimeout: 60
+
+App:
+  DefaultPageSize: 10
+  MaxPageSize: 100
+  LogSavePath: storage/logs
+  LogFileName: app
+  LogFileExt: .log
+  UploadSavePath: storage/uploads
+  UploadServerUrl: http://127.0.0.1:8000/static
+  UploadImageAllowExts:
+    - .jpg
+    - .jpeg
+    - .png
+
+Database:
+  BDType: mysql
+  Username: root
+  Passworld: root
+  Host: 172.16.106.131:3306
+  DBName: blog_service
+  TablePrefix: blog_
+  Charset: utf8
+  ParseTime: true
+  MaxIdleConns: 10
+  MaxOpenConns: 30
+
+JWT:
+  Secret: eddycjy
+  Issuer: blog-service
+  Expire: 7200
+
+Email:
+  Host: smtp.qq.com
+  Post: 465
+  UserName: *****@qq.com
+  Password: *******
+  IsSSL: true
+  From: ****@qq.com
+  To:
+    - *******@qq.com
+    - **********@qq.com
+
+settings:
+  application:
+    domain: localhost:80
+    host: 0.0.0.0
+    ishttps: false
+    port: "80"
+    readtimeout: 1
+    writetimeout: 1
+  
+  database:
+    type: "mysql"
+    user: "root"
+    password: "root"
+    hostname: "127.0.0.1:3306"
+
+  jwt:
+    secret: wecat
+    timeout: 86400
+
+  log:
+    compress: true
+    consolestdout: true
+    filestdout: true
+    level: "debug"
+    localtime: true
+    maxage: 30
+    maxbackups: 300
+    maxsize: 10240
+    path: ./log/wecat.log
+  
+  ssl:
+    key: "/path/key.key"
+    pem: "/path/pem.pem"
+  
+  redis:
+    host: "127.0.0.1:6379"
+    password: ""
+    maxidle: 30
+    maxactive: 30
+    idletimeout: 200

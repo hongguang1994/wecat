@@ -30,7 +30,7 @@ var (
 )
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&config, "config", "c", "config/setting.yml", "configuration file.")
+	StartCmd.PersistentFlags().StringVarP(&config, "config", "c", "configs/setting.yml", "configuration file.")
 }
 
 func setup() error {

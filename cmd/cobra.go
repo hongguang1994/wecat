@@ -12,7 +12,6 @@ var rootCmd = &cobra.Command{
 	Use:   "wecat",
 	Short: "wecat",
 	Long:  `wecat`,
-
 	Run: func(cmd *cobra.Command, args []string) {
 
 	},
