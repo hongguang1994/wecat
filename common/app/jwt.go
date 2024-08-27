@@ -2,8 +2,8 @@ package app
 
 import (
 	"time"
+	"wecat/common/util"
 	"wecat/global"
-	"wecat/pkg/util"
 
 	"github.com/golang-jwt/jwt"
 )

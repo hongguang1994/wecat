@@ -1,11 +1,11 @@
 package v1
 
 import (
-	"wecat/internal/logger"
+	"wecat/common/app"
+	"wecat/common/convert"
+	"wecat/common/errcode"
+	"wecat/common/logger"
 	"wecat/internal/service"
-	"wecat/pkg/app"
-	"wecat/pkg/convert"
-	"wecat/pkg/errcode"
 
 	"github.com/gin-gonic/gin"
 )

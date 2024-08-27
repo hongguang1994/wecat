@@ -6,9 +6,12 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"wecat/logger"
-	"wecat/pkg/setting"
-	"wecat/routers"
+	"wecat/common/logger"
+	"wecat/common/setting"
+	"wecat/global"
+
+	"wecat/internal/models"
+	"wecat/internal/routers"
 
 	"github.com/spf13/cobra"
 )
@@ -34,24 +37,85 @@ func init() {
 }
 
 func setup() error {
-	if err := setting.Setup(config); err != nil {
+	err := setupSetting()
+	if err != nil {
 		return err
 	}
-	// viper.SetConfigFile(config)
-	// err := viper.ReadInConfig()
-	// if err != nil {
-	// 	fmt.Printf("Parse config file fail: %s", err.Error())
-	// }
-	// 初始化日志
-	logger.Setup()
 
+	err = setupDBEngine()
+	if err != nil {
+		return err
+	}
+
+	err = setupLog()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func setupSetting() error {
+	setting, err := setting.NewSetting(config)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("Server", &global.ServerSetting)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("App", &global.AppSetting)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("Database", &global.DatabaseSetting)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("JWT", &global.JWTSetting)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("Email", &global.EmailSetting)
+	if err != nil {
+		return err
+	}
+
+	err = setting.ReadSection("Log", &global.LogSetting)
+	if err != nil {
+		return err
+	}
+
+	global.ServerSetting.ReadTimeout *= time.Second
+	global.ServerSetting.WriteTimeout *= time.Second
+	global.JWTSetting.Expire *= time.Second
+
+	return nil
+}
+
+func setupDBEngine() error {
+	var err error
+	global.DBEngine, err = models.NewDBEngine(global.DatabaseSetting)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setupLog() error {
+	logger.Setup(global.LogSetting)
 	return nil
 }
 
 func run() {
 	logger.Debug("Server run ...")
 
-	router := routers.InitRouter()
+	router := routers.NewRouter()
 
 	// server := &http3.Server{
 	// 	Addr:       ":443",
@@ -61,14 +125,17 @@ func run() {
 	// }
 
 	server := http.Server{
-		Addr:    setting.AppSetting.Host + ":" + setting.AppSetting.Port,
-		Handler: router,
-		// TLSConfig: generateTLSConfig(),
+		Addr:           ":" + global.ServerSetting.HttpPort,
+		Handler:        router,
+		ReadTimeout:    global.ServerSetting.ReadTimeout,
+		WriteTimeout:   global.ServerSetting.WriteTimeout,
+		MaxHeaderBytes: 1 << 20,
 	}
-	logger.Infof("listen: %s", setting.AppSetting.Host+":"+setting.AppSetting.Port)
+
+	logger.Infof("listen: %s", ":"+global.ServerSetting.HttpPort)
 	go func() {
-		if setting.AppSetting.IsHttps {
-			if err := server.ListenAndServeTLS(setting.SSLSetting.Pem, setting.SSLSetting.Key); err != nil {
+		if global.ServerSetting.IsHttps {
+			if err := server.ListenAndServeTLS(global.ServerSetting.SSL.Pem, global.ServerSetting.SSL.Key); err != nil {
 				logger.Fatal("faild to listen ...")
 			}
 		} else {

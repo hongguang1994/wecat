@@ -7,8 +7,8 @@ import (
 	"os"
 	"path"
 	"strings"
+	"wecat/common/util"
 	"wecat/global"
-	"wecat/pkg/util"
 )
 
 type FileType int

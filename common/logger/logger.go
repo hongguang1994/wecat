@@ -3,7 +3,7 @@ package logger
 import (
 	"os"
 	"time"
-	"wecat/pkg/setting"
+	"wecat/common/setting"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -22,28 +22,28 @@ var levelMap = map[string]zapcore.Level{
 	"fatal":  zapcore.FatalLevel,
 }
 
-func Setup() {
+func Setup(s *setting.LogSettingS) {
 	var syncWriters []zapcore.WriteSyncer
-	level := getLoggerLevel(setting.LogSetting.Level)
+	level := getLoggerLevel(s.Level)
 
 	fileConfig := &lumberjack.Logger{
-		Filename:   setting.LogSetting.Path,
-		MaxSize:    setting.LogSetting.MaxSize,
-		MaxAge:     setting.LogSetting.MaxAge,
-		MaxBackups: setting.LogSetting.MaxBackups,
-		LocalTime:  setting.LogSetting.LocalTime,
-		Compress:   setting.LogSetting.Compress,
+		Filename:   s.Path,
+		MaxSize:    s.MaxSize,
+		MaxAge:     s.MaxAge,
+		MaxBackups: s.MaxBackups,
+		LocalTime:  s.LocalTime,
+		Compress:   s.Compress,
 	}
 	encoder := zap.NewProductionEncoderConfig()
 	encoder.EncodeTime = func(t time.Time, pae zapcore.PrimitiveArrayEncoder) {
 		pae.AppendString(t.Format("2016-01-02 15:04:05.000000"))
 	}
 
-	if setting.LogSetting.ConsoleStdout {
+	if s.ConsoleStdout {
 		syncWriters = append(syncWriters, zapcore.AddSync(os.Stdout))
 	}
 
-	if setting.LogSetting.FileStdout {
+	if s.FileStdout {
 		syncWriters = append(syncWriters, zapcore.AddSync(fileConfig))
 	}
 

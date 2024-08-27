@@ -3,11 +3,11 @@ package middleware
 import (
 	"fmt"
 	"time"
+	"wecat/common/app"
+	"wecat/common/email"
+	"wecat/common/errcode"
+	"wecat/common/logger"
 	"wecat/global"
-	"wecat/internal/logger"
-	"wecat/pkg/app"
-	"wecat/pkg/email"
-	"wecat/pkg/errcode"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +31,7 @@ func Recovery() gin.HandlerFunc {
 				err := defailtMailer.SendMail(
 					global.EmailSetting.To,
 					fmt.Sprintf("异常抛出,发生时间: %d", time.Now().Unix()),
-					fmt.Sprintf("错误信息: %v", err),ls
+					fmt.Sprintf("错误信息: %v", err),
 				)
 
 				if err != nil {

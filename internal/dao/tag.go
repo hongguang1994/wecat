@@ -1,8 +1,8 @@
 package dao
 
 import (
+	"wecat/common/app"
 	"wecat/internal/models"
-	"wecat/pkg/app"
 )
 
 func (d *Dao) CountTag(name string, state uint8) (int64, error) {

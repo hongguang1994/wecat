@@ -1,8 +1,8 @@
 package app
 
 import (
+	"wecat/common/convert"
 	"wecat/global"
-	"wecat/pkg/convert"
 
 	"github.com/gin-gonic/gin"
 )

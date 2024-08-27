@@ -2,7 +2,7 @@ package app
 
 import (
 	"net/http"
-	"wecat/pkg/errcode"
+	"wecat/common/errcode"
 
 	"github.com/gin-gonic/gin"
 )

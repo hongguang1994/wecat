@@ -3,10 +3,10 @@ package routers
 import (
 	"net/http"
 	"time"
+	"wecat/common/limiter"
 	"wecat/global"
 	"wecat/internal/middleware"
 	v1 "wecat/internal/routers/api/v1"
-	"wecat/pkg/limiter"
 
 	"github.com/gin-gonic/gin"
 )

@@ -2,8 +2,12 @@
 Server:
   RunMode: debug
   HttpPort: 8000
+  IsHttps: false
   ReadTimeout: 60
   WriteTimeout: 60
+  SSL:
+    key: "/path/key.key"
+    pem: "/path/pem.pem"
 
 App:
   DefaultPageSize: 10
@@ -38,13 +42,25 @@ JWT:
 Email:
   Host: smtp.qq.com
   Post: 465
-  UserName: *****@qq.com
-  Password: *******
+  UserName: xxxxxx@qq.com
+  Password: xxxxxx
   IsSSL: true
-  From: ****@qq.com
+  From: xxxxx@qq.com
   To:
-    - *******@qq.com
-    - **********@qq.com
+    - xxxxxxxx@qq.com
+    - xxxxxxxxxxxx@qq.com
+  
+Log:
+  compress: true
+  consolestdout: true
+  filestdout: true
+  level: "debug"
+  localtime: true
+  maxage: 30
+  maxbackups: 300
+  maxsize: 10240
+  path: ./log/wecat.log
+
 
 settings:
   application:

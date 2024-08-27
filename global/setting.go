@@ -1,6 +1,6 @@
 package global
 
-import "wecat/pkg/setting"
+import "wecat/common/setting"
 
 var (
 	ServerSetting   *setting.ServerSettingS
@@ -8,4 +8,5 @@ var (
 	DatabaseSetting *setting.DatabaseSettingS
 	JWTSetting      *setting.JWTSettingS
 	EmailSetting    *setting.EmailSettingS
+	LogSetting      *setting.LogSettingS
 )

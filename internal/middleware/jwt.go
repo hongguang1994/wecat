@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"wecat/pkg/app"
-	"wecat/pkg/errcode"
+	"wecat/common/app"
+	"wecat/common/errcode"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"

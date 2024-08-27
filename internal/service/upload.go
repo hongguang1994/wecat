@@ -4,8 +4,8 @@ import (
 	"errors"
 	"mime/multipart"
 	"os"
+	"wecat/common/upload"
 	"wecat/global"
-	"wecat/pkg/upload"
 )
 
 type FileInfo struct {

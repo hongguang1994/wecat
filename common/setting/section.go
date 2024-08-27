@@ -5,8 +5,15 @@ import "time"
 type ServerSettingS struct {
 	RunMode      string
 	HttpPort     string
+	IsHttps      bool
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
+	SSL          SSLSettingS
+}
+
+type SSLSettingS struct {
+	Key string
+	Pem string
 }
 
 type AppSettingS struct {
@@ -48,6 +55,18 @@ type EmailSettingS struct {
 	IsSSL    bool
 	From     string
 	To       []string
+}
+
+type LogSettingS struct {
+	Compress      bool
+	ConsoleStdout bool
+	FileStdout    bool
+	Level         string
+	LocalTime     bool
+	MaxAge        int
+	MaxBackups    int
+	MaxSize       int
+	Path          string
 }
 
 func (s *Setting) ReadSection(k string, v interface{}) error {

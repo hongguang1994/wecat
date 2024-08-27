@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"time"
-	"wecat/internal/logger"
+	"wecat/common/logger"
 
 	"github.com/gin-gonic/gin"
 )

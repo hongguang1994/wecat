@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"time"
-	"wecat/logger"
+	"wecat/common/logger"
 
 	"github.com/gin-gonic/gin"
 )

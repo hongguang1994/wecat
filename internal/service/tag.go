@@ -1,8 +1,8 @@
 package service
 
 import (
+	"wecat/common/app"
 	"wecat/internal/models"
-	"wecat/pkg/app"
 )
 
 type CountTagRequest struct {

@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"wecat/pkg/app"
-	"wecat/pkg/errcode"
-	"wecat/pkg/limiter"
+	"wecat/common/app"
+	"wecat/common/errcode"
+	"wecat/common/limiter"
 
 	"github.com/gin-gonic/gin"
 )

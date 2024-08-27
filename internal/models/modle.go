@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"wecat/pkg/setting"
+	"wecat/common/setting"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
