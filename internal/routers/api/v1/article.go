@@ -1,6 +1,11 @@
 package v1
 
-import "github.com/gin-gonic/gin"
+import (
+	"wecat/common/app"
+	"wecat/common/errcode"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Aritcle struct{}
 
@@ -9,7 +14,7 @@ func NewArticle() Aritcle {
 }
 
 func (a Aritcle) Get(c *gin.Context) {
-
+	app.NewResponse(c).ToErrorResponse(errcode.ServerError)
 }
 
 func (a Aritcle) List(c *gin.Context) {

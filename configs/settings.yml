@@ -17,15 +17,17 @@ App:
   LogFileExt: .log
   UploadSavePath: storage/uploads
   UploadServerUrl: http://127.0.0.1:8000/static
+  UploadImageMaxSize: 5
   UploadImageAllowExts:
     - .jpg
     - .jpeg
     - .png
+    - .yml
 
 Database:
   BDType: mysql
   Username: root
-  Passworld: root
+  Passworld: z1x2c3@hutool
   Host: 172.16.106.131:3306
   DBName: blog_service
   TablePrefix: blog_
@@ -51,54 +53,19 @@ Email:
     - xxxxxxxxxxxx@qq.com
   
 Log:
-  compress: true
+  Compress: true
   consolestdout: true
-  filestdout: true
-  level: "debug"
-  localtime: true
-  maxage: 30
-  maxbackups: 300
-  maxsize: 10240
-  path: ./log/wecat.log
+  Filestdout: true
+  Level: "debug"
+  Localtime: true
+  Maxage: 30
+  Maxbackups: 300
+  Maxsize: 10240
+  Path: ./log/wecat.log
 
-
-settings:
-  application:
-    domain: localhost:80
-    host: 0.0.0.0
-    ishttps: false
-    port: "80"
-    readtimeout: 1
-    writetimeout: 1
-  
-  database:
-    type: "mysql"
-    user: "root"
-    password: "root"
-    hostname: "127.0.0.1:3306"
-
-  jwt:
-    secret: wecat
-    timeout: 86400
-
-  log:
-    compress: true
-    consolestdout: true
-    filestdout: true
-    level: "debug"
-    localtime: true
-    maxage: 30
-    maxbackups: 300
-    maxsize: 10240
-    path: ./log/wecat.log
-  
-  ssl:
-    key: "/path/key.key"
-    pem: "/path/pem.pem"
-  
-  redis:
-    host: "127.0.0.1:6379"
-    password: ""
-    maxidle: 30
-    maxactive: 30
-    idletimeout: 200
+Redis:
+  Host: "127.0.0.1:6379"
+  Password: ""
+  MaxIdle: 30
+  MaxActive: 30
+  IdleTimeout: 200

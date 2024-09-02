@@ -69,6 +69,14 @@ type LogSettingS struct {
 	Path          string
 }
 
+type RedisSettingS struct {
+	Host        string
+	Password    string
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout int
+}
+
 func (s *Setting) ReadSection(k string, v interface{}) error {
 	err := s.vp.UnmarshalKey(k, v)
 	if err != nil {

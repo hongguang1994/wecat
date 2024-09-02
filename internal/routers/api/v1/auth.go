@@ -26,7 +26,7 @@ func GetAuth(c *gin.Context) {
 		response.ToErrorResponse(errcode.UnauthorizedAuthNotExist)
 		return
 	}
-
+	logger.Info(param)
 	token, err := app.GenerateToken(param.AppKey, param.AppSecret)
 	if err != nil {
 		logger.Errorf("app.GenerateToken err: %v", err)

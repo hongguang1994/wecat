@@ -61,6 +61,7 @@ func (e *Error) StatusCode() int {
 		return http.StatusBadRequest
 	case UnauthorizedAuthNotExist.Code():
 		// return fallthrough
+		return http.StatusNonAuthoritativeInfo
 	case UnauthorizedTokenError.Code():
 
 	case UnauthorizedTokenGenerate.Code():

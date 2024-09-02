@@ -8,6 +8,11 @@ import (
 	"wecat/internal/middleware"
 	v1 "wecat/internal/routers/api/v1"
 
+	_ "wecat/docs"
+
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +24,9 @@ var methodLimiters = limiter.NewMethodLimiter().AddBuckets(limiter.LimiterBucket
 })
 
 func NewRouter() *gin.Engine {
+
+	gin.SetMode(gin.DebugMode)
+
 	r := gin.New()
 	// r.Use(gin.Logger())
 	// r.Use(gin.Recovery())
@@ -26,8 +34,12 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.AccessLog())
 	r.Use(middleware.Recovery())
 	r.Use(middleware.Translations())
+	r.Use(middleware.Options)
 
 	r.Use(middleware.RateLimiter(methodLimiters))
+
+	url := ginSwagger.URL("http://127.0.0.1:8000/swagger/doc.json")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 
 	upload := v1.NewUpload()
 	r.POST("/upload/file", upload.UploadFile)
@@ -35,8 +47,12 @@ func NewRouter() *gin.Engine {
 
 	r.POST("/auth", v1.GetAuth)
 
+	r.GET("/getCaptcha", v1.GenerateCaptcha)
+	r.GET("/verifyCaptcha", v1.CaptchaVerify)
+
 	apiv1 := r.Group("api/v1")
-	apiv1.Use(middleware.JWT())
+	// apiv1.Use(middleware.JWT())
+
 	{
 		tag := v1.NewTag()
 		apiv1.POST("/rags", tag.Create)

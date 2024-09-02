@@ -10,7 +10,7 @@ import (
 	"wecat/common/setting"
 	"wecat/global"
 
-	"wecat/internal/models"
+	"wecat/internal/model"
 	"wecat/internal/routers"
 
 	"github.com/spf13/cobra"
@@ -42,15 +42,20 @@ func setup() error {
 		return err
 	}
 
+	err = setupLog()
+	if err != nil {
+		return err
+	}
+
 	err = setupDBEngine()
 	if err != nil {
 		return err
 	}
 
-	err = setupLog()
-	if err != nil {
-		return err
-	}
+	// err = setupRedis()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -91,6 +96,11 @@ func setupSetting() error {
 		return err
 	}
 
+	err = setting.ReadSection("Redis", &global.RedisSetting)
+	if err != nil {
+		return err
+	}
+
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
 	global.JWTSetting.Expire *= time.Second
@@ -100,7 +110,7 @@ func setupSetting() error {
 
 func setupDBEngine() error {
 	var err error
-	global.DBEngine, err = models.NewDBEngine(global.DatabaseSetting)
+	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
 	if err != nil {
 		return err
 	}
@@ -109,6 +119,15 @@ func setupDBEngine() error {
 
 func setupLog() error {
 	logger.Setup(global.LogSetting)
+	return nil
+}
+
+func setupRedis() error {
+	var err error
+	global.RedisClient, err = global.NewRedisClient(global.RedisSetting)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -135,25 +154,25 @@ func run() {
 	logger.Infof("listen: %s", ":"+global.ServerSetting.HttpPort)
 	go func() {
 		if global.ServerSetting.IsHttps {
-			if err := server.ListenAndServeTLS(global.ServerSetting.SSL.Pem, global.ServerSetting.SSL.Key); err != nil {
+			if err := server.ListenAndServeTLS(global.ServerSetting.SSL.Pem, global.ServerSetting.SSL.Key); err != nil && err != http.ErrServerClosed {
 				logger.Fatal("faild to listen ...")
 			}
 		} else {
-			if err := server.ListenAndServe(); err != nil {
+			if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 				logger.Fatal("faild to listen ...")
 			}
 		}
-
 	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
 
-	logger.Info("Shutdown Server ...")
-
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
+	logger.Info("Shutdown Server ...")
+
 	if err := server.Shutdown(ctx); err != nil {
 		logger.Fatalf("Server Shutdown: %v", err)
 	}

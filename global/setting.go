@@ -9,4 +9,5 @@ var (
 	JWTSetting      *setting.JWTSettingS
 	EmailSetting    *setting.EmailSettingS
 	LogSetting      *setting.LogSettingS
+	RedisSetting    *setting.RedisSettingS
 )

@@ -15,6 +15,7 @@ type Claims struct {
 }
 
 func GetJWTSecret() []byte {
+	// logger.Infof("jwt secret: %s", global.JWTSetting.Secret)
 	return []byte(global.JWTSetting.Secret)
 }
 
@@ -30,7 +31,7 @@ func GenerateToken(appKey, appSecret string) (string, error) {
 		},
 	}
 
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := tokenClaims.SignedString(GetJWTSecret())
 	return token, err
 }

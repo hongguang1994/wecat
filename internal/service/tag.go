@@ -2,7 +2,7 @@ package service
 
 import (
 	"wecat/common/app"
-	"wecat/internal/models"
+	"wecat/internal/model"
 )
 
 type CountTagRequest struct {
@@ -36,7 +36,7 @@ func (svc *Service) CountTag(param *CountTagRequest) (int64, error) {
 	return svc.dao.CountTag(param.Name, param.State)
 }
 
-func (svc *Service) GetTagList(param *TagListRequest, pager *app.Pager) ([]*models.Tag, error) {
+func (svc *Service) GetTagList(param *TagListRequest, pager *app.Pager) ([]*model.Tag, error) {
 	return svc.dao.GetTagList(param.Name, param.State, pager.Page, pager.PageSize)
 }
 

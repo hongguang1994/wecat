@@ -1,8 +1,8 @@
 package dao
 
-import "wecat/internal/models"
+import "wecat/internal/model"
 
-func (d *Dao) GetAuth(appKey, appSecret string) (models.Auth, error) {
-	auth := models.Auth{AppKey: appKey, AppSecret: appSecret}
+func (d *Dao) GetAuth(appKey, appSecret string) (model.Auth, error) {
+	auth := model.Auth{AppKey: appKey, AppSecret: appSecret}
 	return auth.Get(d.engine)
 }
